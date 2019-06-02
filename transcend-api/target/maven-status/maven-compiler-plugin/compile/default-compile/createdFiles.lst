@@ -1,0 +1,13 @@
+com\cloudproco\transcend\controller\TranscendTradeApiController.class
+com\cloudproco\transcend\service\TranscendTradeApiService.class
+com\cloudproco\transcend\custom\domain\PartyDetailsResponse.class
+com\cloudproco\transcend\repository\TranscendTradeApiRepositoryCustom.class
+com\cloudproco\transcend\repository\TranscendTradeApiRepository.class
+com\cloudproco\transcend\domain\QParty.class
+com\cloudproco\model\PartyMetaData.class
+com\cloudproco\transcend\service\TranscendTradeApiServiceImpl.class
+com\cloudproco\transcend\TranscendApiApplication.class
+com\cloudproco\transcend\domain\Party.class
+com\cloudproco\transcend\custom\domain\PersonProjection.class
+com\cloudproco\transcend\custom\domain\PersonDetailsResponse.class
+com\cloudproco\transcend\domain\Party_.class
