@@ -38,4 +38,18 @@ public class TranscendTradeApiController {
 		}
 		
 	}
+	@GetMapping("/dicematch")
+	public ResponseEntity<Float> performDiceAlgorithim(@RequestParam(value = "gtmParty", required = false) String gtmParty,@RequestParam(value = "restrictedParty", required = false) String restrictedParty,Pageable page){
+		try {
+			Float diceCofResponse=transcendTradeApiService.performDiceMatch(gtmParty, restrictedParty, page);
+			if(diceCofResponse != null) {
+				return ResponseEntity.ok(diceCofResponse);
+			}else {
+				ResponseEntity.noContent().build();
+			}
+		}catch(Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
+		}
+		return null;
+	}
 }
