@@ -25,9 +25,9 @@ public class TranscendTradeApiController {
 	private TranscendTradeApiService transcendTradeApiService;
 	
 	@PostMapping(path = "/partyInfo")
-	public ResponseEntity<Page<PartyDetailsResponse>> getAllInformation(@RequestPart("partyMataData") PartyMetaData partyMataData, Pageable page) {
+	public ResponseEntity<Page<PartyDetailsResponse>> getAllInformation(@RequestPart("partyMetaData") PartyMetaData partyMetaData, Pageable page) {
 		try {
-			Page<PartyDetailsResponse> personDetails = transcendTradeApiService.getPartyInformation(partyMataData, page);
+			Page<PartyDetailsResponse> personDetails = transcendTradeApiService.getPartyInformation(partyMetaData, page);
 			if(personDetails != null) {
 				return ResponseEntity.ok(personDetails);	
 			}
@@ -51,5 +51,18 @@ public class TranscendTradeApiController {
 			return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
 		}
 		return null;
+	}
+	
+	@PostMapping("/partyInfo/dicematch")
+	public ResponseEntity<Page<PartyDetailsResponse>> getAllInfoWithDiceAlgo(@RequestPart("partyMetaData") PartyMetaData partyMetaData,@RequestParam(value = "matchFactor", required = false) float matchFactor,Pageable page){
+		try {
+			Page<PartyDetailsResponse> personDetails = transcendTradeApiService.getPartyInformationWithDiceMatch(partyMetaData, matchFactor, page);
+			if(personDetails != null) {
+				return ResponseEntity.ok(personDetails);	
+			}
+			return ResponseEntity.noContent().build();
+		}catch(Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
+		}
 	}
 }

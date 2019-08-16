@@ -12,5 +12,7 @@ import com.cloudproco.transcend.domain.Party;
 public interface TranscendTradeApiService {
 
 	Page<PartyDetailsResponse> getPartyInformation( PartyMetaData partyMataData, Pageable page);
+	Page<PartyDetailsResponse> getPartyInformationWithDiceMatch( PartyMetaData partyMetaData, float matchFactor, Pageable page);
 	Float performDiceMatch(String gtmParty,String restrictedParty,Pageable page);
+	Float getDiceCoefficient(String gtmParty, String restrictedParty);
 }

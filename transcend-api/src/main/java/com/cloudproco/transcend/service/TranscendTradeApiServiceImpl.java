@@ -1,6 +1,7 @@
 package com.cloudproco.transcend.service;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -117,9 +118,61 @@ public class TranscendTradeApiServiceImpl implements TranscendTradeApiService {
 	}
 
 
+	@Override
+	public Float getDiceCoefficient(String gtmParty, String restrictedParty) {
+
+		Set<String> nx = new HashSet<String>();
+		Set<String> ny = new HashSet<String>();
+		if (null == gtmParty || null == restrictedParty) {
+			Float object1=new Float(0);
+			return object1;
+		}
+		if (gtmParty == restrictedParty) {
+			Float object2=new Float(1);
+			return object2;
+		}
+		for (int i = 0; i <= gtmParty.length() - 2; i++) {
+			char x1 = gtmParty.charAt(i);
+			char x2 = gtmParty.charAt(i + 1);
+			String temp = "" + x1 + x2;
+			nx.add(temp);
+		}
+		for (int j = 0; j < restrictedParty.length() - 2; j++) {
+			char y1 = restrictedParty.charAt(j);
+			char y2 = restrictedParty.charAt(j + 1);
+			String tmp = "" + y1 + y2;
+			ny.add(tmp);
+		}
+		Set<String> intersection = new HashSet<String>(nx);
+		intersection.retainAll(ny);
+		float totcombigrams = intersection.size();
+		float diceCofficient=(2 * totcombigrams) / (nx.size() + ny.size());
+		Float object=new Float(diceCofficient);
+		return object;
+	}
+	
 	private PartyDetailsResponse convertToPartyDetailsResponse(Party p) {
 		return new PartyDetailsResponse(p.getPartyId().toString(), p.getFirstName(), p.getLastName(),
 				p.getCompanyName(), p.getAddressLine1(), p.getAddressLine2(), p.getAddressLine3(), p.getCity(),
 				p.getState(), p.getPostalCode(), p.getCountry2(), p.getListSource());
+	}
+	
+	
+	public Page<PartyDetailsResponse> getPartyInformationWithDiceMatch( PartyMetaData partyMetaData, float matchFactor, Pageable page){
+		try {
+			String searchParam = partyMetaData.getCompanyName();
+			Page<Party> data = transcendRepository.findAll(page);
+			Iterator<Party> iter = data.iterator();
+			while(iter.hasNext()) {
+				Party party = iter.next();
+				if(getDiceCoefficient(party.getCompanyName(), searchParam) < matchFactor) {
+					iter.remove();
+				}	
+			}
+			return data.map(this::convertToPartyDetailsResponse);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }
